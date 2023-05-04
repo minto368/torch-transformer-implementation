@@ -10,10 +10,6 @@ from models.enc_dec import (
 from models.attn import multiheadattention
 
 class Transformer(nn.Module):
-    """
-    Vanilla Transformer with O(L^2) complexity
-    """
-
     def __init__(self, enc_in, dec_in, dec_out, pred_len, d_model=512,
                  n_heads=8, enc_layers=3, dec_layers=2, d_ff=512,
                  dropout=0.1, activation='gelu', output_attention=True):
@@ -52,14 +48,6 @@ class Transformer(nn.Module):
         )
         self.pred_len = pred_len
         self.output_attention = output_attention
-
-    def _make_trg_mask(self, trg):
-        B, L, _= trg.shape
-        mask_shape = [B, 1, L, L]
-        with torch.no_grad():
-            trg_mask = torch.triu(torch.ones(mask_shape, dtype=torch.bool, diagonal=1))
-    
-        return trg_mask
 
     def forward(
         self,
