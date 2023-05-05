@@ -36,7 +36,7 @@ class multiheadattention(nn.Module):
         if attn_mask is not None:
             score = score.masked_fill(mask, -np.inf)
 
-        attention = torch.softmax(score / (self.d_model ** (1 / 2)), dim=3)
+        attention = torch.softmax(score / (self.head_dim ** (1 / 2)), dim=3)
 
         out = torch.einsum("bhql,blhd->bqhd", [attention, values]).reshape(
             batch_size, queries_len, self.heads * self.head_dim
